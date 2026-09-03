@@ -399,6 +399,41 @@ nlm audio create <notebook-id> -y
 
 ---
 
+## Download Issues
+
+### "Refusing to write outside the download directory"
+
+MCP downloads are confined to one directory: `~/Downloads/gemini-notebook` by
+default, or `NOTEBOOKLM_DOWNLOAD_DIR` when the operator set it. The boundary
+stops a download from landing on shell startup files, agent instruction files,
+or git hooks, which matters because notebook source content is untrusted and
+can carry instructions.
+
+```python
+# WRONG: absolute path outside the download directory
+download_artifact(notebook_id="...", artifact_type="report", output_path="/Users/me/notes/report.md")
+
+# CORRECT: relative to the download directory
+download_artifact(notebook_id="...", artifact_type="report", output_path="report.md")
+```
+
+The response carries the absolute path the file was written to. Read the
+destination from there rather than assuming it.
+
+To save elsewhere, either move the file afterwards, run the `nlm` CLI (which
+writes wherever the user points it), or have the operator set
+`NOTEBOOKLM_DOWNLOAD_DIR` and restart the MCP server.
+
+### "NotebookLM delivers AAC audio in an MP4 container"
+
+Audio arrives as AAC inside MP4. Use a `.m4a` or `.mp4` suffix, not `.mp3`.
+Transcode afterwards if MP3 is required:
+
+```bash
+nlm download audio <nb-id> --output raw.m4a
+ffmpeg -i raw.m4a -acodec libmp3lame -q:a 2 podcast.mp3
+```
+
 ## Command Syntax Issues
 
 ### Wrong Argument Order

@@ -361,7 +361,7 @@ pipeline(action="run", notebook_id="abc", pipeline_name="ingest-and-podcast", in
 | `NOTEBOOKLM_BASE_URL` | Override base URL for Enterprise/Workspace (default: `https://notebooklm.google.com`) |
 | `NOTEBOOKLM_PROJECT_ID` | Required GCP project ID or number for Gemini Notebook Enterprise |
 | `NOTEBOOKLM_LOCATION` | Enterprise location/multi-region (`global`, `us`, or `eu`; default: `global`) |
-| `NOTEBOOKLM_DOWNLOAD_DIR` | Optional directory boundary for artifact downloads. Unset preserves the default behavior. |
+| `NOTEBOOKLM_DOWNLOAD_DIR` | Directory MCP artifact downloads are confined to. Unset defaults to `~/Downloads/gemini-notebook`, or `~/.notebooklm-mcp-cli/downloads/` where no `~/Downloads` exists. Also bounds CLI downloads when set. |
 | `NOTEBOOKLM_ALLOWED_FILE_DIRS` | Optional OS-separated list of directories allowed for local file sources. Unset means unrestricted. |
 | `NOTEBOOKLM_DISABLED_GROUPS` | Comma-separated tool groups to hide (see [Selective tool exposure](#selective-tool-exposure)) |
 | `NOTEBOOKLM_DISABLED_TOOLS` | Comma-separated individual tools to hide |

@@ -1,6 +1,6 @@
 ---
 name: nlm-skill
-version: "0.10.0"
+version: "0.10.1"
 description: 'Expert guide for the Gemini Notebook (formerly Google NotebookLM) CLI (`nlm`) and MCP server - interfaces for Gemini Notebook. Use this skill when users want to interact with Gemini Notebook programmatically, including: creating/managing notebooks, adding sources (URLs, YouTube, text, Google Drive), generating content (podcasts, reports, quizzes, flashcards, mind maps, slides, infographics, videos, data tables), conducting research, chatting with sources, or automating Gemini Notebook workflows. Triggers on mentions of "nlm", "notebooklm", "Gemini Notebook", "podcast generation", "audio overview", "refactor document", "critique draft", or any Gemini Notebook-related automation task.'
 ---
 
@@ -469,6 +469,18 @@ notebook (or every notebook with `all_notebooks=True`) into per-notebook
 folders, `export_artifact` with `export_type` (`docs`/`sheets`), and
 `studio_delete` with `confirm=True`.
 
+**Where MCP downloads go.** Downloads through the MCP tools are confined to one
+download directory: `~/Downloads/gemini-notebook` by default, or whatever the
+operator set in `NOTEBOOKLM_DOWNLOAD_DIR`. Pass `output_path` relative to that
+directory (`"podcast.m4a"`, `"My Notebook/report.md"`); a path outside it is
+refused. The result carries the absolute path the file was written to, so read
+the destination from the response rather than assuming it. If a user asks for a
+file somewhere else, tell them the download location and let them move it, or
+have them run the `nlm` CLI, which writes wherever they point it. Do not try to
+work around the boundary: it exists because source content can carry
+instructions, and it stops a download from overwriting shell startup files,
+agent instruction files, or git hooks.
+
 #### CLI Commands
 
 ```bash
@@ -482,7 +494,7 @@ nlm studio status <nb-id> --json --mcp-compatible  # MCP-shaped paginated output
 nlm video list <nb-id> --json                      # List videos only
 
 # Download artifacts
-nlm download audio <nb-id> --output podcast.mp3
+nlm download audio <nb-id> --output podcast.m4a   # AAC/MP4; .mp3 is rejected
 nlm download video <nb-id> --output video.mp4
 nlm download report <nb-id> --output report.md
 nlm download file <nb-id> --id <artifact-id> --output export.bin  # Generic type-10 file export
@@ -491,6 +503,8 @@ nlm download slide-deck <nb-id> --output slides.pptx --format pptx  # PPTX
 nlm download quiz <nb-id> --output quiz.html --format html    # Also: json, markdown
 nlm download all <nb-id> -d ./exports                          # Every completed artifact
 nlm download all --all-notebooks -d ./exports --skip-existing  # Sweep every notebook
+# The CLI writes wherever the user points it. Only MCP downloads are confined
+# to the download directory. Setting NOTEBOOKLM_DOWNLOAD_DIR bounds both.
 
 # Export to Google Docs/Sheets
 nlm export sheets <nb-id> <artifact-id> --title "My Data Table"

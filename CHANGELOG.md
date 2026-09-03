@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1] - 2026-09-03
+
+Security release. Upgrading is recommended for anyone running the MCP server.
+
+### Security
+
+- **Artifact downloads are confined to an approved directory ([GHSA-92q4-9x75-55rf](https://github.com/jacob-bd/gemini-notebook-mcp-cli/security/advisories/GHSA-92q4-9x75-55rf))** — `validate_output_path` relied on a denylist of sensitive locations, so every path it did not happen to list stayed writable. A prompt injection carried in notebook source content could steer an MCP client into saving artifact bytes over shell startup files (`~/.zshenv`, `~/.zprofile`), agent instruction files (`~/.codex/AGENTS.md`, `~/.cursor/skills/*/SKILL.md`), git hooks, or launch agents, which other programs then execute or read as instructions. The MCP download tools (`download_artifact`, `download_all_artifacts`) now confine every write to a single download directory, resolve each path before checking it so a symlink cannot hop outside, and write to the path that was actually validated. The denylist stays as a second layer and now covers more locations. Reported by **@Naor-Peretz**.
+
+### Added
+
+- `NOTEBOOKLM_DOWNLOAD_DIR` sets the download directory for MCP tools. When unset, downloads land in `~/Downloads/gemini-notebook`, falling back to `~/.notebooklm-mcp-cli/downloads/` on systems with no `~/Downloads` directory, such as headless Linux hosts, containers, and Windows installs with a relocated Downloads folder.
+
+### Changed
+
+- **MCP downloads now default to a fixed directory.** A relative path from an MCP client resolves inside the download directory instead of the server's working directory, and an absolute path outside it is refused. CLI downloads are unchanged: `nlm download ... -o <path>` still writes wherever you point it, because there the path comes from the person running the command rather than from a model.
+
 ## [0.10.0] - 2026-08-27
 
 This release consolidates the unpublished 0.9.15 maintenance work and adds
