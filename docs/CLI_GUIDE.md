@@ -128,22 +128,33 @@ language, or pass `--language es-419` for a specific generation.
 ### Downloads
 
 ```bash
-nlm download audio <notebook> <artifact-id> --output podcast.mp3
-nlm download video <notebook> <artifact-id> --output video.mp4
-nlm download report <notebook> <artifact-id> --output report.md
-nlm download mind-map <notebook> <artifact-id> --output mindmap.json
-nlm download slide-deck <notebook> <artifact-id> --output slides.pdf
-nlm download infographic <notebook> <artifact-id> --output infographic.png
-nlm download data-table <notebook> <artifact-id> --output data.csv
+nlm download audio <notebook> --id <artifact-id> --output podcast.m4a
+nlm download video <notebook> --id <artifact-id> --output video.mp4
+nlm download report <notebook> --id <artifact-id> --output report.md
+nlm download mind-map <notebook> --id <artifact-id> --output mindmap.json
+nlm download slide-deck <notebook> --id <artifact-id> --output slides.pdf
+nlm download infographic <notebook> --id <artifact-id> --output infographic.png
+nlm download data-table <notebook> --id <artifact-id> --output data.csv
 
 # Interactive formats (quiz/flashcards)
-nlm download quiz <notebook> <artifact-id> --format html --output quiz.html
-nlm download flashcards <notebook> <artifact-id> --format markdown --output cards.md
+nlm download quiz <notebook> --id <artifact-id> --format html --output quiz.html
+nlm download flashcards <notebook> --id <artifact-id> --format markdown --output cards.md
 
 # Download every completed artifact into a per-notebook folder
 nlm download all <notebook> --output-dir ./exports
 nlm download all --all-notebooks --output-dir ./exports --skip-existing
 ```
+
+Audio arrives as AAC in an MP4 container, so it needs a `.m4a` or `.mp4`
+suffix; `.mp3` and other mismatched extensions are rejected rather than
+written with bytes that contradict the name. Transcode afterwards if you
+need MP3:
+
+```bash
+nlm download audio <notebook> --id <artifact-id> --output raw.m4a
+ffmpeg -i raw.m4a -acodec libmp3lame -q:a 2 podcast.mp3
+```
+
 
 ### Research
 
@@ -396,7 +407,7 @@ nlm audio create ai --format deep_dive --confirm
 nlm studio status ai
 
 # 6. Download when ready
-nlm download audio ai <artifact-id> --output podcast.mp3
+nlm download audio ai --id <artifact-id> --output podcast.m4a
 ```
 
 ---

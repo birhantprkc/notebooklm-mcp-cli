@@ -48,7 +48,7 @@ nlm notebook list                              # List all notebooks
 nlm notebook create "Research Project"         # Create a notebook
 nlm source add <notebook> --url "https://..."  # Add sources
 nlm audio create <notebook> --confirm          # Generate podcast
-nlm download audio <notebook> <artifact-id>    # Download audio file
+nlm download audio <notebook> --id <artifact-id>    # Download audio file
 nlm download all <notebook> -d ./exports       # Download every artifact
 nlm share public <notebook>                    # Enable public link
 ```
