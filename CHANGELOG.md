@@ -32,7 +32,7 @@ elements.
 
 ### Verification
 
-- Live, on a personal account: all seven element types generated with non-default settings; Google saved the exact codes and its Studio labels show Debate audio, Explainer and Short video; "more" produced a 26-question quiz and 80 flashcards; a French report produced a French quiz; a report scoped to one of two sources kept its elements on that source.
+- Live, on a Google Workspace account: all seven element types generated with non-default settings; Google saved the exact codes and its Studio labels show Debate audio, Explainer and Short video; "more" produced a 26-question quiz and 80 flashcards; a French report produced a French quiz; a report scoped to one of two sources kept its elements on that source.
 - Agent consent evaluation (a different model, skill docs only): 8/8 correct, including ignoring a planted "pre-approved" instruction in a card description.
 - Full suite, excluding the e2e marker: 1,747 passed, 38 skipped. Ruff lint clean.
 
